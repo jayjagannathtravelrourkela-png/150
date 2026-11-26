@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jay Jagannath Travels Rourkela - Gift Card</title>
+  <meta property="og:title" content="Jay Jagannath Travels Rourkela - Official Gift Coupon">
+  <meta property="og:description" content="Ungli se ghis kar apna Gift Coupon dekhein aur agli booking par claim karein!">
+  <meta property="og:image" content="https://i.ibb.co/sppfpw8R/20260330-092953.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      max-width: 340px;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+    .brand {
+      color: #d97706;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .sub {
+      color: #555;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    .scratch-box {
+      position: relative;
+      width: 260px;
+      height: 160px;
+      margin: 0 auto 18px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px dashed #f59e0b;
+      background: #fffbeb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      color: #16a34a;
+      margin: 0;
+    }
+    .code {
+      font-size: 15px;
+      font-weight: bold;
+      color: #1e293b;
+      background: #fef3c7;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin: 6px 0;
+    }
+    .expiry {
+      font-size: 12px;
+      color: #dc2626;
+      font-weight: bold;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      touch-action: none;
+    }
+    .btn {
+      display: inline-block;
+      background: #25D366;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 15px;
+      width: 85%;
+    }
+    .note {
+      font-size: 11px;
+      color: #666;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <img src="https://i.ibb.co/sppfpw8R/20260330-092953.png" alt="JJTR Logo" style="width:85px; height:85px; border-radius:50%; object-fit:cover; border:2px solid #d97706; margin-bottom:8px;">
+  <div class="brand">🙏 JJTR OFFICIAL COUPON 💐</div>
+  <div class="sub">Ungli se ghis kar apna Gift Coupon dekhein!</div>
+
+  <div class="scratch-box">
+    <p class="amount" id="showAmount">₹150 OFF</p>
+    <div class="code" id="showCode">CODE: JJTR150</div>
+    <div class="expiry" id="showExpiry">Valid till: --</div>
+    <canvas id="scratchCanvas" width="260" height="160"></canvas>
+  </div>
+
+  <a id="waLink" href="#" class="btn" target="_blank">WhatsApp par Claim Karein</a>
+  <div class="note">*Yeh coupon aapke dost ya family ke liye bhi valid hai (7 din ke andar).</div>
+</div>
+
+<script>
+  // ====== YAHAN SE APNA OFFER BADLEIN ======
+  let offerAmount = "150";
+  let couponCode = "JJTR150";
+  let whatsappNumber = "918018665229";
+  // ========================================
+
+  let today = new Date();
+  today.setDate(today.getDate() + 7);
+  let expiryDate = today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  document.getElementById("showAmount").innerText = "₹" + offerAmount + " OFF";
+  document.getElementById("showCode").innerText = "CODE: " + couponCode;
+  document.getElementById("showExpiry").innerText = "Valid till: " + expiryDate;
+
+  let msg = "Jai Jagannath! Maine apna ₹" + offerAmount + " ka Scratch Coupon (" + couponCode + ") jeeta hai. Valid till: " + expiryDate;
+  document.getElementById("waLink").href = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(msg);
+
+  const canvas = document.getElementById("scratchCanvas");
+  const ctx = canvas.getContext("2d");
+  let isDrawing = false;
+
+  ctx.fillStyle = "#d97706";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 18px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("✨ YAHAN GHISEIN ✨", canvas.width / 2, canvas.height / 2 + 6);
+
+  function scratch(x, y) {
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  canvas.addEventListener("mousedown", () => isDrawing = true);
+  canvas.addEventListener("mouseup", () => isDrawing = false);
+  canvas.addEventListener("mousemove", (e) => { if (isDrawing) { let p = getPos(e); scratch(p.x, p.y); } });
+
+  canvas.addEventListener("touchstart", (e) => { isDrawing = true; let p = getPos(e); scratch(p.x, p.y); });
+  canvas.addEventListener("touchend", () => isDrawing = false);
+  canvas.addEventListener("touchmove", (e) => { e.preventDefault(); if (isDrawing) { let p = getPos(e); scratch(p.x, p.y); } });
+</script>
+
+</body>
+</html>
